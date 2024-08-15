@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 List<String> pages = [
   AppRoutes.driverStats,
   AppRoutes.viewvehicle,
-  AppRoutes.drivervehicle,
+  AppRoutes.driverrequest,
+  AppRoutes.driversubscription,
 
 
 ];

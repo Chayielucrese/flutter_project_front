@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Components/mypopup.dart'; // Import your MyPopupComponent
 import 'package:flutter_application_1/Components/vehicleTextFiellds.dart';
 import 'package:flutter_application_1/Routes/app_routes.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Vehicles/vehicle_ctrl.dart';
@@ -74,14 +76,14 @@ class DriverVehiclePage extends StatelessWidget {
                         children: [
                           VehicleOption(
                             label: 'Car',
-                            value: 'Car',
+                            value: 'car',
                             groupValue: controller.selectedVehicleType,
                             onChanged: (value) {
                               controller.updateValue(value!);
                             },
                           ),
                           VehicleOption(
-                            label: 'Motobike',
+                            label: 'Motorbike',
                             value: 'motobike',
                             groupValue: controller.selectedVehicleType,
                             onChanged: (value) {
@@ -125,10 +127,42 @@ class DriverVehiclePage extends StatelessWidget {
                             ),
                             SizedBox(height: 10),
                             ElevatedButton(
-                              onPressed: () {
-                                
-                           controller.submitForm;
-                                // controller.submitForm(context);
+                              onPressed: () async {
+                                if (controller.formKey.currentState!
+                                    .validate()) {
+                                  // Show the popup and wait for it to complete
+                                  await showPopup(
+                                    context,
+                                    (index, pickedFile) {
+                                      if (pickedFile != null) {
+                                        switch (index) {
+                                          case 0:
+                                            controller.vehicleInsurCert =
+                                                pickedFile;
+                                            break;
+                                          case 1:
+                                            controller.vehicleRegCert =
+                                                pickedFile;
+                                            break;
+                                          case 2:
+                                            controller.vehicleRoadWthRep =
+                                                pickedFile;
+                                            break;
+                                          case 3:
+                                            controller.vehicleSaleCert =
+                                                pickedFile;
+                                            break;
+                                        }
+                                        controller.update();
+                                        print('Document Index: $index');
+                                        print(
+                                            'Selected File: ${pickedFile.path},hello: $pickedFile');
+                                      }
+                                    },
+                                  );
+
+                                  await controller.submitForm();
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.pink,
@@ -165,64 +199,37 @@ class DriverVehiclePage extends StatelessWidget {
   }
 }
 
-
-
-class DownloadImagesPopup extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Colors.pink[50],
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      title: Text(
-        'Download Images',
-        style: TextStyle(
-          color: Colors.pink,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildDownloadButton('Image 1', Colors.pink),
-          SizedBox(height: 10),
-          _buildDownloadButton('Image 2', Colors.pink),
-          SizedBox(height: 10),
-          _buildDownloadButton('Image 3', Colors.pink),
-          SizedBox(height: 10),
-          _buildDownloadButton('Image 4', Colors.pink),
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            'Close',
-            style: TextStyle(color: Colors.pink),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDownloadButton(String imageName, Color color) {
-    return ElevatedButton(
-      onPressed: () {
-        // Implement your download logic here
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-      child: Text(
-        'Download $imageName',
-        style: TextStyle(color: Colors.white),
-      ),
-    );
-  }
-}
+List<String> vehicleMarks = [
+  'Toyota',
+  'Honda',
+  'Ford',
+  'Chevrolet',
+  'Nissan',
+  'BMW',
+  'Mercedes-Benz',
+  'Audi',
+  'Hyundai',
+  'Kia',
+  'Volkswagen',
+  'Mazda',
+  'Tesla',
+  'Subaru',
+  'Lexus',
+  'Jaguar',
+  'Land Rover',
+  'Volvo',
+  'Porsche',
+  'Ferrari',
+  'Lamborghini',
+  'Mitsubishi',
+  'Peugeot',
+  'Renault',
+  'Fiat',
+  'Alfa Romeo',
+  'Dodge',
+  'Jeep',
+  'Cadillac',
+  'Acura',
+  'Infiniti',
+  'Lincoln'
+];

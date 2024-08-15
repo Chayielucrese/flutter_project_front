@@ -105,6 +105,7 @@ class DriverUploadController extends AppController {
           break;
       }
     }
+
     update();
   }
 

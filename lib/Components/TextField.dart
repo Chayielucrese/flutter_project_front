@@ -13,6 +13,7 @@ Widget appTextField({
   bool isEmail = false,
   bool isPhone = false,
   bool isPassword = false,
+  bool isPlateNumber = false,
   int maxLines = 1, // Added maxLines parameter
 }) {
   return TextFormField(
@@ -50,7 +51,36 @@ Widget appTextField({
       if (isPassword) {
         return signupController.validatePassword(value);
       }
+      if(isPlateNumber){
+        return validatePlateNumber(value, 'CM');
+      }
       return null;
     },
+    
   );
+
+  
+  
 }
+
+ String? validatePlateNumber(String plateNumber, String countryCode) {
+    if (plateNumber.isEmpty) {
+      return 'Plate number is required';
+    }
+
+    Map<String, RegExp> patterns = {
+      'CM': RegExp(r'^[A-Z]{2}-\d{3}-[A-Z]{2}$'),
+    };
+
+    final pattern = patterns[countryCode];
+
+    if (pattern == null) {
+      return 'Unsupported country code';
+    }
+
+    if (!pattern.hasMatch(plateNumber)) {
+      return 'Invalid plate number format for $countryCode';
+    }
+
+    return null;
+    }

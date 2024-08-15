@@ -1,9 +1,7 @@
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Upload/upload_ctrl.dart';
 import 'package:get/get.dart';
-
 
 class DriverUploadPage extends StatelessWidget {
   const DriverUploadPage({super.key});
@@ -145,7 +143,9 @@ class DriverUploadPage extends StatelessWidget {
                       ),
                       SizedBox(height: 30.0),
                       ElevatedButton(
-                        onPressed: () { controller.submitForm;},
+                        onPressed: () {
+                          controller.submitForm();
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.pink,
                           padding: EdgeInsets.symmetric(

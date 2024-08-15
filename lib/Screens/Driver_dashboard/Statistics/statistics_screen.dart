@@ -16,37 +16,55 @@ class DriverDashboardPage extends StatelessWidget {
       child: GetBuilder<DriverDashboardController>(
         builder: (controller) => Scaffold(
           backgroundColor: Colors.white,
-          // appBar: AppBar(
-          //   backgroundColor: Colors.pink.withOpacity(0.9),
-          //   title: Text('Hello!', style: TextStyle(color: Colors.white, fontSize: 17)),
-          //   leading: IconButton(
-          //     iconSize: 30,
-          //     icon: CircleAvatar(
-          //       backgroundImage: AssetImage('Assets/taxi4.png'),
-          //       // Your profile image here
-          //     ),
-          //     onPressed: () {
-          //       // Handle profile image click
-          //     },
-          //   ),
-          //   actions: [
-          //     IconButton(
-          //       icon: Icon(Icons.edit, color: Colors.white),
-          //       onPressed: () {
-          //         // Handle edit button click
-          //       },
-          //     ),
-          //   ],
-          // ),
+          appBar: AppBar(
+            backgroundColor: Colors.pink,
+            title: Text('Hello!', style: TextStyle(color: Colors.white, fontSize: 17)),
+            leading: IconButton(
+              iconSize: 30,
+              icon: CircleAvatar(
+                backgroundImage: AssetImage('Assets/taxi4.png'),
+                // Your profile image here
+              ),
+              onPressed: () {
+                // Handle profile image click
+              },
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.edit, color: Colors.white),
+                onPressed: () {
+                  // Handle edit button click
+                },
+              ),
+            ],
+          ),
           bottomNavigationBar: buildBottomNavigation(AppRoutes.driverStats),
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(6.0),
               child: Column(
                 children: [
                   // Transparent red box message
-
-                  // First Container with Cards
+                  Visibility(
+                    visible: !controller.isDocumentVerified,
+                    child: Container(
+                      padding: const EdgeInsets.all(16.0),
+                      margin: const EdgeInsets.only(bottom: 16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(8.0),
+                        border: Border.all(color: Colors.red, width: 1.0),
+                      ),
+                      child: Text(
+                        'You cannot access some functionalities until your documents are verified.',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ),
                   Container(
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
@@ -68,7 +86,7 @@ class DriverDashboardPage extends StatelessWidget {
                             Expanded(
                               child: DashboardCard(
                                 title: 'Number of Vehicles',
-                                value: '0',
+                                value:'0',
                                 icon: Icons.directions_car,
                               ),
                             ),
@@ -153,26 +171,6 @@ class DriverDashboardPage extends StatelessWidget {
                         fit: BoxFit.cover,
                         width: double.infinity, // Make image occupy full width
                         height: 200.0, // Adjust height as needed
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: !controller.isDocumentVerified,
-                    child: Container(
-                      padding: const EdgeInsets.all(16.0),
-                      margin: const EdgeInsets.only(bottom: 16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(8.0),
-                        border: Border.all(color: Colors.red, width: 1.0),
-                      ),
-                      child: Text(
-                        'You cannot access some functionalities until your documents are verified.',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
-                        ),
                       ),
                     ),
                   ),

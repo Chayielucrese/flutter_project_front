@@ -40,6 +40,7 @@ class LoginController extends AppController {
         final response = await _loginUser(email, password);
         if (response.statusCode == 200 || response.statusCode == 201) {
           final responseJson = json.decode(response.body);
+          print("token :${responseJson['token']['token']}");
           _loginToken(responseJson['token']['token']);
 
           await _getAllRoles();
@@ -49,8 +50,8 @@ class LoginController extends AppController {
           roles?.forEach((name, id) async {
             if (name == "client" && int.parse(userRole) == id) {
               Get.toNamed(AppRoutes.clientwelcome);
-            } 
-             if (name == "driver" && int.tryParse(userRole) == id) {
+            }
+            if (name == "driver" && int.parse(userRole) == id) {
               print("${name},  ${userRole}");
               Get.toNamed(AppRoutes.driverwelcome);
             }
@@ -100,10 +101,11 @@ class LoginController extends AppController {
     return response;
   }
 
-  Future<void> _loginToken(String token) async {
-    final pref = await SharedPreferences.getInstance();
-    pref.setString("token", token);
-  }
+ Future<void> _loginToken(String token) async {
+  final pref = await SharedPreferences.getInstance();
+  bool result = await pref.setString("token", token);
+  print("Token stored: $result");  // Check if token storage was successful
+}
 
   Future<Map<String, String>> _getUserParams() async {
     final pref = await SharedPreferences.getInstance();

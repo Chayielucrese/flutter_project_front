@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter_application_1/Config/default_api_link.dart';
 import 'package:flutter_application_1/Controller/app_ctrl.dart';
 import 'package:http/http.dart' as http;
@@ -9,16 +8,22 @@ class ViewVehicleController extends AppController {
   List<dynamic> vehicles = [];
   String? token;
 
-  void initState() {
+  @override
+  void onInit() {
     super.onInit();
-    retrieveToken().then((_) => fetchVehicles());
+    _loadToken().then((_) => fetchVehicles());
   }
 
-  Future<void> retrieveToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> _loadToken() async {
+    token = await _getToken();
+    print("Loaded token: $token");
+  }
 
-    token = prefs.getString('token');
-    update();
+  Future<String?> _getToken() async {
+    final pref = await SharedPreferences.getInstance();
+    String? token = pref.getString("token");
+    print("Retrieved token: $token");
+    return token;
   }
 
   Future<void> fetchVehicles() async {
@@ -37,12 +42,12 @@ class ViewVehicleController extends AppController {
         Map<String, dynamic> responseJson = json.decode(response.body);
         List<dynamic> vehiclesList = responseJson['msg'];
         vehicles = vehiclesList;
-        update();
+        update(); // Notify listeners
       } else {
         print("Failed to fetch vehicles: ${response.statusCode}");
       }
     } catch (e) {
-      alertError("an error occured please try again later");
+      alertError("An error occurred, please try again later.");
     }
   }
 
@@ -59,10 +64,32 @@ class ViewVehicleController extends AppController {
       if (response.statusCode == 200) {
         fetchVehicles(); // Refresh the list after deletion
       } else {
-        alertError("fail to delete vehicle");
+        alertError("Failed to delete vehicle.");
       }
     } catch (e) {
-      alertError("an error occured please try again later");
+      alertError("An error occurred, please try again later.");
+    }
+  }
+
+  Future<void> addVehicle(Map<String, dynamic> vehicleData) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${Config.apiUrl}/addVehicle'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(vehicleData),
+      );
+
+      if (response.statusCode == 200) {
+        update();
+        fetchVehicles();
+      } else {
+        alertError("Failed to add vehicle.");
+      }
+    } catch (e) {
+      alertError("An error occurred, please try again later.");
     }
   }
 }

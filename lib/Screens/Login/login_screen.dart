@@ -1,11 +1,12 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Components/TextField.dart';
 import 'package:flutter_application_1/Routes/app_routes.dart';
 import 'package:flutter_application_1/Screens/Login/Login_ctrl.dart';
 import 'package:get/get.dart';
 
-import 'package:validators/validators.dart' as validator;
+
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -94,14 +95,14 @@ class LoginPage extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildTextField(
+                              appTextField(
                                 labelText: 'Email',
                                 icon: Icons.email,
                                 controller: controller.emailController,
                                 isEmail: true,
                               ),
                               SizedBox(height: 10.0),
-                              _buildTextField(
+                              appTextField(
                                 labelText: 'Password',
                                 obscureText: true,
                                 icon: Icons.lock,
@@ -171,46 +172,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField({
-    required String labelText,
-    bool obscureText = false,
-    required IconData icon,
-    required TextEditingController controller,
-    bool isEmail = false,
-  }) {
-    return TextFormField(
-      controller: controller,
-      maxLines: 1,
-      decoration: InputDecoration(
-        labelText: labelText,
-        border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black54),
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-        prefixIcon: Icon(icon, color: Colors.black),
-        labelStyle: TextStyle(color: Colors.black),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black54),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black54),
-        ),
-      ),
-      obscureText: obscureText,
-      style: TextStyle(color: Colors.black),
-      textAlignVertical: TextAlignVertical.center,
-      validator: (value) {
-        value = value?.trim();
-        if (value == null || value.isEmpty) {
-          return 'This field is required';
-        }
-        if (isEmail && !validator.isEmail(value)) {
-          return 'Please enter a valid email address';
-        }
-        return null;
-      },
-    );
-  }
-
+  
 }
 
