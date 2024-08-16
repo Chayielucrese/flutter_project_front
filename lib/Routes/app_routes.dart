@@ -12,4 +12,5 @@ class AppRoutes {
   static String login = '/login';
   static String driverrequest = '/driverrequest';
   static String driversubscription = '/driversubscription';
+  static String driverprofile = '/driverprofile';
 }

@@ -33,7 +33,7 @@ class DriverDashboardPage extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.edit, color: Colors.white),
                 onPressed: () {
-                  // Handle edit button click
+                 Get.toNamed(AppRoutes.driverprofile);
                 },
               ),
             ],

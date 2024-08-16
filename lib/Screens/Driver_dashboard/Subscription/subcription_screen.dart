@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Components/subcription%20Component.dart';
+import 'package:get/get.dart';
 
 class DriverSubscriptionPage extends StatelessWidget {
   const DriverSubscriptionPage({super.key});
@@ -8,7 +10,7 @@ class DriverSubscriptionPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Subscription Plans",
+          "Subscriptions",
           style: TextStyle(
             color: Colors.pink,
             fontSize: 16,
@@ -19,64 +21,72 @@ class DriverSubscriptionPage extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.pink),
       ),
       body: ListView(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15.0),
         children: [
           _buildSubscriptionCard(
-            title: "Instant Ride Access",
-            price: "5000FCFA/month",
-            description:
-                "Access to instant ride notifications and the ability to accept only instant service rides.",
-            features: [
-              "Instant ride notifications",
-              "Accept only instant rides",
-              "Basic support"
-            ],
+            name: "Instant Service Only",
+            price: "2000 FCFA",
+            description: "Access to instant service rides only.",
+            onPressed: () {
+              Get.to(() => SubscribeNowPage(
+                planName: "Instant Service Only",
+                planPrice: "2000 FCFA",
+                planDescription: "Access to instant service rides only.",
+              ));
+            },
           ),
-          SizedBox(height: 15),
           _buildSubscriptionCard(
-            title: "Advanced Ride Access",
-            price: "6000FCFA/month",
-            description:
-                "Access to advanced ride requests and the ability to accept only scheduled rides.",
-            features: [
-              "Access to advanced ride requests",
-              "Accept only advanced rides",
-              "Standard support"
-            ],
+            name: "Advanced Service Only",
+            price: "3000 FCFA",
+            description: "Access to advanced service rides only.",
+            onPressed: () {
+              Get.to(() => SubscribeNowPage(
+                planName: "Advanced Service Only",
+                planPrice: "3000",
+                planDescription: "Access to advanced service rides only.",
+              ));
+            },
           ),
-          SizedBox(height: 15),
           _buildSubscriptionCard(
-            title: "Complete Ride Access",
-            price: "10000FCFA/month",
-            description:
-                "Access to both instant and advanced ride requests, with notifications for both types.",
-            features: [
-              "Access to both instant and advanced rides",
-              "Premium support",
-              "Additional features like ride analytics"
-            ],
+            name: "Full Access",
+            price: "5000 FCFA",
+            description: "Access to both instant and advanced service rides.",
+            onPressed: () {
+              Get.to(() =>  SubscribeNowPage(
+                planName: "Full Access",
+                planPrice: "5000",
+                planDescription: "Access to both instant and advanced service rides.",
+              ));
+            },
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // You can implement additional functionality if needed
+        },
+        child: Icon(Icons.add, color: Colors.white,),
+        backgroundColor: Colors.pink,
       ),
     );
   }
 
   Widget _buildSubscriptionCard({
-    required String title,
+    required String name,
     required String price,
     required String description,
-    required List<String> features,
+    required VoidCallback onPressed,
   }) {
     return Card(
       elevation: 4,
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+              name,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -84,39 +94,25 @@ class DriverSubscriptionPage extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Text(
-              price,
+              "Price: $price",
               style: TextStyle(fontSize: 16, color: Colors.pink),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
             Text(
-              description,
+              "Description: $description",
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
-            Text(
-              "Features:",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            ...features.map((feature) => Text(
-                  "• $feature",
-                  style: TextStyle(fontSize: 16),
-                )),
-            SizedBox(height: 10),
             Row(
-               mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle subscription purchase
-                  },
-                  child: Text('Subscribe Now',
-                      style: TextStyle(color: Colors.white)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.pink,
-                  ),
-                ),
-              ],
-            ),
+            ElevatedButton(
+              onPressed: onPressed,
+              child: Text('Subscribe Now', style: TextStyle(color:Colors.white),),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pink,
+              ),
+            ),],)
           ],
         ),
       ),

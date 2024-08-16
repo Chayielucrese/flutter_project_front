@@ -3,6 +3,8 @@ import 'package:flutter_application_1/Screens/Account_Activation/activation_bind
 import 'package:flutter_application_1/Screens/Account_Activation/activation_screen.dart';
 import 'package:flutter_application_1/Screens/Client_dashboard/Welcome/welcome_binding.dart';
 import 'package:flutter_application_1/Screens/Client_dashboard/Welcome/welcome_screen.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/Profile/profile_binding.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/Profile/profile_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Request/request_binding.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Request/request_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Subscription/subcription_binding.dart';
@@ -82,5 +84,9 @@ class AppPages {
         name: AppRoutes.driversubscription,
         page: () =>  const DriverSubscriptionPage(),
         binding: DriverSubscriptionBinding()),
+          GetPage(
+        name: AppRoutes.driverprofile,
+        page: () =>   DriverProfilePage(),
+        binding: DriverProfileBinding()),
   ];
 }

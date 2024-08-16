@@ -26,7 +26,7 @@ Widget appTextField({
         borderSide: BorderSide(color: Colors.black54),
       ),
       contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      prefixIcon: Icon(icon, color: Colors.black),
+      prefixIcon: Icon(icon, color: Colors.pink),
       labelStyle: TextStyle(color: Colors.black),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black54),
