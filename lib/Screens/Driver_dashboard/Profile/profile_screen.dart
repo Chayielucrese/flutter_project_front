@@ -115,12 +115,14 @@ class DriverProfilePage extends StatelessWidget {
               appTextField(
                 labelText: "Account Password",
                 icon: Icons.password,
+                obscureText: true,
                 controller: controller.passwordController,
               ),
               const SizedBox(height: 20),
               appTextField(
                 labelText: "Phone",
                 icon: Icons.phone,
+
                 controller: controller.phoneController,
               ),
               const SizedBox(height: 20),
@@ -129,7 +131,7 @@ class DriverProfilePage extends StatelessWidget {
                 icon: Icons.email,
                 controller: controller.emailController,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
 
               // Save Profile Button
               ElevatedButton(

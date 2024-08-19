@@ -22,6 +22,9 @@ dependencies:
   charts_flutter: ^0.12.0
   provider: ^6.0.0
   fl_chart: ^0.68.0
+  google_maps_flutter: ^2.9.0
+  dio: ^5.6.0
+  flutter_polyline_points: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -57,3 +60,5 @@ flutter:
     - Assets/no_car.jpg
     - Assets/Front car-pana.png
     - Assets/Profile pic-cuate.png
+    - Assets/bike_back.png
+    - Assets/bike2.png

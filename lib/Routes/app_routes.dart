@@ -13,4 +13,7 @@ class AppRoutes {
   static String driverrequest = '/driverrequest';
   static String driversubscription = '/driversubscription';
   static String driverprofile = '/driverprofile';
-}
+  static String clientprofile = '/clientprofile';
+  static String ridedetails = '/ridedetails';
+  static String reservationscreen = '/reservationscreen';
+  }

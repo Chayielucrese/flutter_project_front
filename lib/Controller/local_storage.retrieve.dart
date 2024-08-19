@@ -16,11 +16,6 @@ class LocalData extends GetxController {
     name = await getUserName();
   }
 
-
-
-
-
-
   Future<Map<String, String>> _getUserParams() async {
     final pref = await SharedPreferences.getInstance();
     String? jsonString = pref.getString('userAttributes');
@@ -34,6 +29,10 @@ class LocalData extends GetxController {
   Future<String> getUserEmail() async {
     Map<String, String> userParams = await _getUserParams();
     return userParams['email'] ?? 'Unknown';
+  }
+   Future<String> getUSerCity() async {
+    Map<String, String> userParams = await _getUserParams();
+    return userParams['city'] ?? 'Unknown';
   }
     Future<String> getUserPhone() async {
     Map<String, String> userParams = await _getUserParams();

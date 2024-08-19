@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/subcription%20Component.dart';
+import 'package:flutter_application_1/Routes/app_routes.dart';
 import 'package:get/get.dart';
 
 class DriverSubscriptionPage extends StatelessWidget {
@@ -7,7 +8,10 @@ class DriverSubscriptionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PopScope(
+    canPop: false,
+    onPopInvoked: ((didpop){if(didpop){return;}else{Get.toNamed(AppRoutes.driverStats);}}),
+    child:Scaffold(
       appBar: AppBar(
         title: Text(
           "Subscriptions",
@@ -68,6 +72,7 @@ class DriverSubscriptionPage extends StatelessWidget {
         child: Icon(Icons.add, color: Colors.white,),
         backgroundColor: Colors.pink,
       ),
+    ),
     );
   }
 

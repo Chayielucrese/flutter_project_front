@@ -11,7 +11,7 @@ class ViewVehiclePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Refresh the vehicles list on return
+     
         Get.find<ViewVehicleController>().fetchVehicles();
         return true;
       },
@@ -80,32 +80,34 @@ class ViewVehiclePage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final vehicle = controller.vehicles[index];
                           return Card(
-                            elevation: 4,
+                            elevation: 1,
                             margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                            
                             child: Padding(
-                              padding: const EdgeInsets.all(15.0),
+                              padding: const EdgeInsets.all(0.0),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   // Vehicle Image
                                   Container(
-                                    height: 260,
+                                    height: 250,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image: AssetImage(vehicle['vehicleType'] == 'car'
                                             ? 'Assets/Front car-pana.png' // Path to your car image
-                                            : 'Assets/city_driver.png' // Path to your bike image
+                                            : 'Assets/bike_back.png' // Path to your bike image
                                         ),
                                         fit: BoxFit.cover,
                                       ),
-                                      borderRadius: BorderRadius.circular(0.0),
+                                   
                                     ),
                                   ),
                                   SizedBox(height: 10),
                                   // Vehicle Details
                                   Text(
-                                    '${vehicle['vehicleModel']} (${vehicle['vehicleMake']})',
+                                    '(${vehicle['vehicleMark']}) ${vehicle['vehicleModel']} ',
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -118,8 +120,8 @@ class ViewVehiclePage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 5),
                                   Text(
-                                    'Insurance Status: ${vehicle['insuranceStatus']}',
-                                    style: TextStyle(fontSize: 16),
+                                    'Vehicle Type: ${vehicle['vehicleType']}',
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ),
                                   ),
                                   SizedBox(height: 10),
                                   // Delete Button

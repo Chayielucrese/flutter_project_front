@@ -86,7 +86,8 @@ class DriverDashboardPage extends StatelessWidget {
                             Expanded(
                               child: DashboardCard(
                                 title: 'Number of Vehicles',
-                                value:'0',
+                                
+                                value:controller.fetchNumOfVehicles().toString(),
                                 icon: Icons.directions_car,
                               ),
                             ),
@@ -227,6 +228,7 @@ class DocumentCheck extends StatelessWidget {
 class DashboardCard extends StatelessWidget {
   final String title;
   final String value;
+  
   final IconData icon;
   final Color color; // Added color parameter
 

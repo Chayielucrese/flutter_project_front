@@ -1,8 +1,14 @@
 import 'package:flutter_application_1/Routes/app_routes.dart';
 import 'package:flutter_application_1/Screens/Account_Activation/activation_binding.dart';
 import 'package:flutter_application_1/Screens/Account_Activation/activation_screen.dart';
+import 'package:flutter_application_1/Screens/Client_dashboard/RequestForm/request_form_binding.dart';
+import 'package:flutter_application_1/Screens/Client_dashboard/RequestForm/request_form_screen.dart';
+import 'package:flutter_application_1/Screens/Client_dashboard/RideDetails/ride_detail_screen.dart';
+import 'package:flutter_application_1/Screens/Client_dashboard/RideDetails/ride_details_binding.dart';
 import 'package:flutter_application_1/Screens/Client_dashboard/Welcome/welcome_binding.dart';
 import 'package:flutter_application_1/Screens/Client_dashboard/Welcome/welcome_screen.dart';
+import 'package:flutter_application_1/Screens/Client_dashboard/client_profile/Client_profile_binding.dart';
+import 'package:flutter_application_1/Screens/Client_dashboard/client_profile/client_profile_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Profile/profile_binding.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Profile/profile_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Request/request_binding.dart';
@@ -88,5 +94,17 @@ class AppPages {
         name: AppRoutes.driverprofile,
         page: () =>   DriverProfilePage(),
         binding: DriverProfileBinding()),
+          GetPage(
+        name: AppRoutes.clientprofile,
+        page: () =>   ClientProfilePage(),
+        binding: ClientProfileBinding()),
+        GetPage(
+        name: AppRoutes.ridedetails,
+        page: () =>   RideDetailsPage("car", rideType: 'Car',),
+        binding: RideDetailBinding()),
+         GetPage(
+        name: AppRoutes.reservationscreen,
+        page: () =>   ReservationScreen(),
+        binding: RequestFormBinding()),
   ];
 }

@@ -13,8 +13,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DriverProfileController extends AppController {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  
   TokenController tokenController = Get.put(TokenController());
   DriverUploadController uploadController = Get.put(DriverUploadController());
 
@@ -22,6 +20,8 @@ class DriverProfileController extends AppController {
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
+  
+  final formKey = GlobalKey<FormState>();
 
   File? profileImage;
   String? token;
@@ -37,6 +37,8 @@ class DriverProfileController extends AppController {
     token = await _getToken();
     print("Loaded token: $token");
   }
+
+
 
   Future<String?> _getToken() async {
     final pref = await SharedPreferences.getInstance();
@@ -83,39 +85,35 @@ class DriverProfileController extends AppController {
   }
 
   Future<void> submitForm() async {
+  if (formKey.currentState!.validate()) {
+    String email = emailController.text.trim();
+    String password = passwordController.text;
+    String phone = phoneController.text;
 
-      if (formKey.currentState!.validate()) {
-        String email = emailController.text.trim();
-        String password = passwordController.text;
-        String phone = phoneController.text;
+   
+    String base64ProfileImage = await uploadController.getBase64(profileImage!);
 
-        String base64ProfileImage =
-            await uploadController.getBase64(profileImage!);
+    try {
+      final response = await editProfile(password, email, base64ProfileImage, phone);
 
-        try {
-          final response =
-              await editProfile(password, email, base64ProfileImage, phone);
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        final successResponse = json.decode(response.body);
+        formKey.currentState!.reset();
+        profileImage = null;
+        emailController.clear();
+        phoneController.clear();
+        update();
 
-          if (response.statusCode == 201 || response.statusCode == 200) {
-            final successResponse = json.decode(response.body);
-            formKey.currentState!.reset();
-            profileImage = null;
-            emailController.clear();
-            phoneController.clear();
-            update();
-
-            alertSuccess("${successResponse['msg']}");
-
-            Get.toNamed(AppRoutes.driverStats);
-          } else {
-            final errorResponse = json.decode(response.body);
-            alertError("${errorResponse['msg']}");
-          }
-        } catch (e) {
-          print("Error occurred: $e");
-          alertError("An error occurred. Please try again later.");
-        }
+        alertSuccess("${successResponse['msg']}");
+        Get.toNamed(AppRoutes.driverStats);
+      } else {
+        final errorResponse = json.decode(response.body);
+        alertError("${errorResponse['msg']}");
       }
-    } 
+    } catch (e) {
+      print("Error occurred: $e");
+      alertError("An error occurred. Please try again later.");
+    }
   }
-
+}
+}
