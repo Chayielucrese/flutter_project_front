@@ -14,7 +14,7 @@ Widget appTextField({
   bool isPhone = false,
   bool isPassword = false,
   bool isPlateNumber = false,
-  int maxLines = 1, // Added maxLines parameter
+  int maxLines = 1,  Future<Null> Function()? onTap, // Added maxLines parameter
 }) {
   return TextFormField(
     controller: controller,

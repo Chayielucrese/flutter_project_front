@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Controller/Map/map_api.dart';
+import 'package:flutter_application_1/Controller/token_ctrl.dart';
+import 'package:flutter_application_1/Routes/app_routes.dart';
 import 'package:flutter_application_1/Screens/Client_dashboard/Welcome/welcome_ctrl.dart';
 import 'package:get/get.dart';
 
@@ -14,79 +18,82 @@ class ClientHomePage extends StatelessWidget {
     );
   }
 }
-class RideSelectionScreen extends StatelessWidget {
-  const RideSelectionScreen({super.key});
 
+class RideSelectionScreen extends StatelessWidget {
+  RideSelectionScreen({super.key});
+  TokenController token = Get.put(TokenController());
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ClientWelcomeController>(
-      builder: (controller) => Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.pink,
-                ),
-                child: Text(
-                  'Menu',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
+      builder: (controller) => PopScope(
+        canPop: false,
+        child: Scaffold(
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.pink,
                   ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(Icons.person, color: Colors.pink),
-                title: Text('Profile', style: TextStyle(color: Colors.black)),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.account_balance_wallet, color: Colors.pink),
-                title: Text('Wallet', style: TextStyle(color: Colors.black)),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.logout, color: Colors.pink),
-                title: Text('Logout', style: TextStyle(color: Colors.black)),
-                onTap: () {
-                  Navigator.pushNamed(context, '/');
-                },
-              ),
-            ],
-          ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              flex: 2,
-              child: Stack(
-                children: [
-                  MapScreen(),
-                  Positioned(
-                    top: 16,
-                    right: 16,
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed('/clientprofile');
-                      },
-                      child: CircleAvatar(
-                        radius: 24,
-                        backgroundColor: Colors.pink,
-                        child: Icon(Icons.person, color: Colors.white),
-                      ),
+                  child: Text(
+                    'Menu',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
                     ),
                   ),
-                  Positioned(
-                    top: 16,
-                    left: 16,
-                    child: Builder(
-                      builder: (context) {
+                ),
+                ListTile(
+                  leading: Icon(Icons.person, color: Colors.pink),
+                  title: Text('Profile', style: TextStyle(color: Colors.black)),
+                  onTap: () {
+                    Get.toNamed(AppRoutes.clientprofile);
+                  },
+                ),
+                ListTile(
+                  leading:
+                      Icon(Icons.account_balance_wallet, color: Colors.pink),
+                  title: Text('Wallet', style: TextStyle(color: Colors.black)),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.logout, color: Colors.pink),
+                  title: Text('Logout', style: TextStyle(color: Colors.black)),
+                  onTap: () {
+                    showLogoutDialogue(context, controller);
+                  },
+                ),
+              ],
+            ),
+          ),
+          body: Column(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Stack(
+                  children: [
+                    MapScreen(),
+                    Positioned(
+                      top: 16,
+                      right: 16,
+                      child: GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.clientprofile);
+                        },
+                        child: CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.pink,
+                          child: Icon(Icons.person, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 16,
+                      left: 16,
+                      child: Builder(builder: (context) {
                         return GestureDetector(
                           onTap: () {
                             Scaffold.of(context).openDrawer();
@@ -97,109 +104,82 @@ class RideSelectionScreen extends StatelessWidget {
                             child: Icon(Icons.menu, color: Colors.white),
                           ),
                         );
-                      }
+                      }),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 2,
-              child: SingleChildScrollView(
-                child: Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Choose A Ride",
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.pink),
-                      ),
-                      SizedBox(height: 20),
-                      // Use Obx to reactively display ride options
-                      Obx(() {
-                        if (controller.rides.isEmpty) {
-                          print('${controller.rides}, my rides');
-                          return Center(child: CircularProgressIndicator(color: Colors.pink,));
-                        }
-                        return Column(
-                          children: controller.rides.entries.map((entry) {
-                            return GestureDetector(
-                              onTap: () {
-                                showLoadingDialog(context);
-                              },
-                              child: RideOption(
-                                rideType: entry.key,
-                                description: entry.value,
-                                price: "0 FCFA", // You can adjust this if needed
-                                icon: Icons.directions_car, // You can change this based on ride type
+              Expanded(
+                flex: 2,
+                child: SingleChildScrollView(
+                  child: Container(
+                    color: Colors.white,
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Choose A Ride",
+                          style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.pink),
+                        ),
+                        SizedBox(height: 20),
+                        // Use Obx to reactively display ride options
+                        Obx(() {
+                          if (controller.rides.isEmpty) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.pink,
                               ),
                             );
-                          }).toList(),
-                        );
-                      }),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          PaymentOption(
-                            label: "With Wallet",
-                            icon: Icons.account_balance_wallet,
-                          ),
-                          PaymentOption(
-                            label: "With Cash",
-                            icon: Icons.money,
-                          ),
-                        ],
-                      ),
-                    ],
+
+                      }
+                          return Column(
+                            children: controller.rides.entries.map((entry) {
+                              return GestureDetector(
+                                onTap: () {
+                                  showLoadingDialog(context);
+                                },
+                                child: RideOption(
+                                  rideType: entry.key,
+                                  description: entry.value,
+                                  price:
+                                      "0 FCFA", // You can adjust this if needed
+                                  icon: Icons
+                                      .directions_car, // You can change this based on ride type
+                                ),
+                              );
+                            }).toList(),
+                          );
+                        }),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            PaymentOption(
+                              label: "With Wallet",
+                              icon: Icons.account_balance_wallet,
+                            ),
+                            PaymentOption(
+                              label: "With Cash",
+                              icon: Icons.money,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+ 
   }
-
-  void showLoadingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(
-                color: Colors.pink,
-              ),
-              SizedBox(height: 16),
-              Text('Looking for a driver please wait 5 seconds.....'),
-              SizedBox(height: 16),
-              LinearProgressIndicator(
-                color: Colors.pink,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Dismiss dialog
-              },
-              child: Text('Cancel Request', style: TextStyle(color: Colors.pink)),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
 
   void showLoadingDialog(BuildContext context) {
     showDialog(
@@ -233,8 +213,13 @@ class RideSelectionScreen extends StatelessWidget {
         );
       },
     );
-  }
 
+    Timer(const Duration(seconds: 5), () {
+      Navigator.of(context).pop();
+      Get.toNamed(AppRoutes.reservationscreen);
+    });
+  }
+}
 
 class RideOption extends StatelessWidget {
   final String rideType;
@@ -316,4 +301,46 @@ class PaymentOption extends StatelessWidget {
       ),
     );
   }
+}
+
+void showLogoutDialogue(
+    BuildContext context, ClientWelcomeController controller) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(
+              color: Colors.pink,
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Logout Confirmation',
+              style: TextStyle(color: Colors.pink, fontSize: 20),
+            ),
+            SizedBox(height: 16),
+            Text("Are your sure to quit this page? ")
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Dismiss dialog
+            },
+            child: Text('Cancel', style: TextStyle(color: Colors.pink)),
+          ),
+          TextButton(
+            onPressed: () {
+              controller.removeTokenFromLocalStorage();
+              Get.toNamed(AppRoutes.welcome);
+            },
+            child: Text('yes', style: TextStyle(color: Colors.pink)),
+          ),
+        ],
+      );
+    },
+  );
 }

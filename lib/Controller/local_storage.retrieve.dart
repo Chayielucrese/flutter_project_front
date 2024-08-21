@@ -32,7 +32,7 @@ class LocalData extends GetxController {
   }
    Future<String> getUSerCity() async {
     Map<String, String> userParams = await _getUserParams();
-    return userParams['city'] ?? 'Unknown';
+    return await userParams['city'] ?? 'Unknown';
   }
     Future<String> getUserPhone() async {
     Map<String, String> userParams = await _getUserParams();

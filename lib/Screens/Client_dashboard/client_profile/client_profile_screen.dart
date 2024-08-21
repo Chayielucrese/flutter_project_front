@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:flutter_application_1/Components/TextField.dart';
+import 'package:flutter_application_1/Controller/local_storage.retrieve.dart';
+import 'package:flutter_application_1/Screens/Client_dashboard/client_profile/client_profile_ctrl.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(ClientProfileApp());
@@ -20,89 +22,67 @@ class ClientProfileApp extends StatelessWidget {
   }
 }
 
-class ClientProfilePage extends StatefulWidget {
-  @override
-  _ClientProfilePageState createState() => _ClientProfilePageState();
-}
+class ClientProfilePage extends StatelessWidget {
+  ClientProfilePage({super.key});
+  LocalData data = Get.put(LocalData());
 
-class _ClientProfilePageState extends State<ClientProfilePage> {
-  String name = 'John Doe';
-  String email = 'john.doe@example.com';
-  String city = 'New York';
-  String phoneNumber = '123-456-7890';
-  late String password= '';
-  File? _image;
-
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> _pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
-    }
-  }
-
-  void _editProfile() {
+  void editProfile(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        TextEditingController nameController = TextEditingController(text: name);
-        TextEditingController emailController = TextEditingController(text: email);
-        TextEditingController cityController = TextEditingController(text: city);
-        TextEditingController phoneController = TextEditingController(text: phoneNumber);
-TextEditingController passwordController = TextEditingController(text: password);
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(
-            'Edit Profile',
-            style: TextStyle(color: Colors.pink),
+        return GetBuilder<ClientProfileController>(
+          builder: (controller) => AlertDialog(
+            backgroundColor: Colors.white,
+            title: Text(
+              'Edit Profile',
+              style: TextStyle(color: Colors.pink),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                key: controller.formKey,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 10.0),
+                  appTextField(
+                      controller: controller.passwordController,
+                      obscureText: true,
+                      icon: Icons.password,
+                      labelText: "Password"),
+                  SizedBox(height: 10.0),
+                  appTextField(
+                      controller: controller.emailController,
+                      labelText: "Email",
+                      icon: Icons.email_rounded),
+                  SizedBox(height: 10.0),
+                  appTextField(
+                      controller: controller.cityController,
+                      labelText: "City",
+                      icon: Icons.location_city),
+                  SizedBox(height: 10.0),
+                  appTextField(
+                      controller: controller.phoneController,
+                      labelText: "phone",
+                      icon: Icons.phone),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text('Cancel', style: TextStyle(color: Colors.pink)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Save', style: TextStyle(color: Colors.pink)),
+                onPressed: () {
+                  controller.submitForm(context);
+                  controller.getTokenAndLoadUserProfile();
+                  
+                },
+              ),
+            ],
           ),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: passwordController,
-                  decoration: InputDecoration(labelText: 'Password'),
-                ),
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(labelText: 'Email'),
-                ),
-                TextField(
-                  controller: cityController,
-                  decoration: InputDecoration(labelText: 'City'),
-                ),
-                TextField(
-                  controller: phoneController,
-                  decoration: InputDecoration(labelText: 'Phone Number'),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text('Cancel', style: TextStyle(color: Colors.pink)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('Save', style: TextStyle(color: Colors.pink)),
-              onPressed: () {
-                setState(() {
-                  name = nameController.text;
-                  email = emailController.text;
-                  city = cityController.text;
-                  phoneNumber = phoneController.text;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );
@@ -110,65 +90,76 @@ TextEditingController passwordController = TextEditingController(text: password)
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile Info',style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.pink,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+    return GetBuilder<ClientProfileController>(
+      builder: (controller) => Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Profile Info',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.pink,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                CircleAvatar(
-                  radius: 60,
-                  backgroundImage: _image != null
-                      ? FileImage(_image!)
-                      :AssetImage('Assets/Profile pic-cuate.png'),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 60,
+                    backgroundImage: controller.profileImage != null
+                        ? NetworkImage(controller.profileImage)
+                        : AssetImage('Assets/Profile pic-cuate.png'),
+                    backgroundColor: Colors.pink,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon:
+                          Icon(Icons.camera_alt, color: Colors.white, size: 30),
+                      onPressed: () {
+                        controller.pickImage(0);
+                      },
+                      color: Colors.pink,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 24),
+              buildProfileRow("Name", controller.name),
+              SizedBox(height: 16),
+              buildProfileRow("phone", controller.phone),
+              SizedBox(height: 16),
+              buildProfileRow("Email", controller.email),
+              SizedBox(height: 16),
+              buildProfileRow("City", controller.city),
+              SizedBox(height: 24),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
                   backgroundColor: Colors.pink,
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: IconButton(
-                    icon: Icon(Icons.camera_alt, color: Colors.white, size: 30),
-                    onPressed: _pickImage,
-                    color: Colors.pink,
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        8.0), // Rounded corners for the button
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 24),
-            buildProfileRow('name', name),
-            SizedBox(height: 16),
-            buildProfileRow('Email', email),
-            SizedBox(height: 16),
-            buildProfileRow('City', city),
-            SizedBox(height: 16),
-            buildProfileRow('Phone Number', phoneNumber),
-            SizedBox(height: 24),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.pink,
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0), // Rounded corners for the button
-                ),
+                onPressed: () {
+                  editProfile(context);
+                },
+                child: Text('Edit Profile'),
               ),
-              onPressed: _editProfile,
-              child: Text('Edit Profile'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -183,7 +174,10 @@ TextEditingController passwordController = TextEditingController(text: password)
             flex: 3,
             child: Text(
               '$label:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.pink),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.pink),
             ),
           ),
           Expanded(

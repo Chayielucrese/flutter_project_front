@@ -80,11 +80,9 @@ class SignupController extends GetxController {
   }
 
  Future<void> submitForm() async {
-  // Ensure that the form state is valid and accessible
+
   if (formKey.currentState != null && formKey.currentState!.validate()) {
-    // Debug print to check controller values
-  
-    // Retrieve the text values from controllers
+   
     String name = this.name.text;
     String surname = this.surname.text;
     String email = this.email.text.trim();

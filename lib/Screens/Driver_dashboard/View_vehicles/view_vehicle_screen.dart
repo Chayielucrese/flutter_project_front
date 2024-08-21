@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/BottomNavigator.dart';
 import 'package:flutter_application_1/Routes/app_routes.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/Request/Request_tabview_pages/Instant_service_request/instant_service_request_screen.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/View_vehicles/Vehicle_tabview/document_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/View_vehicles/view_vehicle_ctrl.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +13,6 @@ class ViewVehiclePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-     
         Get.find<ViewVehicleController>().fetchVehicles();
         return true;
       },
@@ -31,12 +32,14 @@ class ViewVehiclePage extends StatelessWidget {
                 ),
               ),
               actions: [
-                if (controller.vehicles.isEmpty) // Show Add button only if there are no vehicles
+                if (controller.vehicles
+                    .isEmpty) // Show Add button only if there are no vehicles
                   IconButton(
                     icon: Icon(Icons.add),
                     onPressed: () {
                       Get.toNamed(AppRoutes.drivervehicle)?.then((_) {
-                        controller.fetchVehicles(); // Refresh the list after returning
+                        controller
+                            .fetchVehicles(); // Refresh the list after returning
                       });
                     },
                   ),
@@ -70,7 +73,8 @@ class ViewVehiclePage extends StatelessWidget {
                             SizedBox(height: 20),
                             Text(
                               'No vehicles found',
-                              style: TextStyle(fontSize: 18, color: Colors.black),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.black),
                             ),
                           ],
                         ),
@@ -81,12 +85,11 @@ class ViewVehiclePage extends StatelessWidget {
                           final vehicle = controller.vehicles[index];
                           return Card(
                             elevation: 1,
-                            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                            
+                            margin: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 15),
                             child: Padding(
                               padding: const EdgeInsets.all(0.0),
                               child: Column(
-                                
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   // Vehicle Image
@@ -95,13 +98,13 @@ class ViewVehiclePage extends StatelessWidget {
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
-                                        image: AssetImage(vehicle['vehicleType'] == 'car'
-                                            ? 'Assets/Front car-pana.png' // Path to your car image
-                                            : 'Assets/bike_back.png' // Path to your bike image
-                                        ),
+                                        image: AssetImage(
+                                            vehicle['vehicleType'] == 'car'
+                                                ? 'Assets/Front car-pana.png' // Path to your car image
+                                                : 'Assets/bike_back.png' // Path to your bike image
+                                            ),
                                         fit: BoxFit.cover,
                                       ),
-                                   
                                     ),
                                   ),
                                   SizedBox(height: 10),
@@ -121,16 +124,20 @@ class ViewVehiclePage extends StatelessWidget {
                                   SizedBox(height: 5),
                                   Text(
                                     'Vehicle Type: ${vehicle['vehicleType']}',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold ),
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(height: 10),
                                   // Delete Button
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: IconButton(
-                                      icon: Icon(Icons.delete, color: Colors.red),
+                                      icon:
+                                          Icon(Icons.delete, color: Colors.red),
                                       onPressed: () {
-                                        _showDeleteConfirmationDialog(context, vehicle, controller);
+                                        _showDeleteConfirmationDialog(
+                                            context, vehicle, controller);
                                       },
                                     ),
                                   ),
@@ -140,21 +147,11 @@ class ViewVehiclePage extends StatelessWidget {
                           );
                         },
                       ),
-                
+
                 // Vehicle Documents Tab
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to vehicle documents page
-                      // Get.toNamed(AppRoutes.vehicleDocuments, arguments: controller.vehicles);
-                    },
-                    child: Text('View Documents'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.pink,
-                    ),
-                  ),
-                ),
-                
+                const Center(
+                    child: DriverDocumentsPage()),
+                  
                 // Maintenance Logs Tab
                 Center(
                   child: ElevatedButton(
@@ -176,12 +173,18 @@ class ViewVehiclePage extends StatelessWidget {
     );
   }
 
-  void _showDeleteConfirmationDialog(BuildContext context, Map<String, dynamic> vehicle, ViewVehicleController controller) {
+  void _showDeleteConfirmationDialog(BuildContext context,
+      Map<String, dynamic> vehicle, ViewVehicleController controller) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Deletion', style: TextStyle(color: Colors.pink,),),
+          title: Text(
+            'Confirm Deletion',
+            style: TextStyle(
+              color: Colors.pink,
+            ),
+          ),
           content: Text('Are you sure you want to delete this vehicle?'),
           actions: [
             TextButton(
@@ -191,7 +194,10 @@ class ViewVehiclePage extends StatelessWidget {
               },
             ),
             TextButton(
-              child: Text('Delete', style: TextStyle(color: Colors.red),),
+              child: Text(
+                'Delete',
+                style: TextStyle(color: Colors.red),
+              ),
               onPressed: () {
                 controller.deleteVehicle(vehicle['id']);
                 Navigator.of(context).pop();
