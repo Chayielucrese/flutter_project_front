@@ -2,38 +2,50 @@ import 'package:flutter/material.dart';
 
 class RequestHistoryPage extends StatelessWidget {
   final List<Map<String, String>> requestHistory = [
-    {
-      'requestId': 'REQ1001',
-      'passengerName': 'Alice Brown',
-      'pickupLocation': 'Market Street',
-      'destination': 'Train Station',
-      'status': 'Accepted',
-      'date': '2024-08-01',
-    },
-    {
-      'requestId': 'REQ1002',
-      'passengerName': 'David Wilson',
-      'pickupLocation': 'Park Avenue',
-      'destination': 'Hospital',
-      'status': 'Declined',
-      'date': '2024-08-02',
-    },
-    {
-      'requestId': 'REQ1003',
-      'passengerName': 'Sarah Lee',
-      'pickupLocation': 'University Campus',
-      'destination': 'Library',
-      'status': 'Accepted',
-      'date': '2024-08-03',
-    },
-    // Add more history data here if needed
+    // {
+    //   'requestId': 'REQ1001',
+    //   'passengerName': 'Alice Brown',
+    //   'pickupLocation': 'Market Street',
+    //   'destination': 'Train Station',
+    //   'status': 'Accepted',
+    //   'date': '2024-08-01',
+    // },
+    // {
+    //   'requestId': 'REQ1002',
+    //   'passengerName': 'David Wilson',
+    //   'pickupLocation': 'Park Avenue',
+    //   'destination': 'Hospital',
+    //   'status': 'Declined',
+    //   'date': '2024-08-02',
+    // },
+    // {
+    //   'requestId': 'REQ1003',
+    //   'passengerName': 'Sarah Lee',
+    //   'pickupLocation': 'University Campus',
+    //   'destination': 'Library',
+    //   'status': 'Accepted',
+    //   'date': '2024-08-03',
+    // },
+    // // Add more history data here if needed
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       
-      body: Padding(
+      body:requestHistory.isEmpty
+          ? Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Center(
+                child: Text(
+                  'Your Ride History is empty',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ])
+          :  Padding(
         padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(

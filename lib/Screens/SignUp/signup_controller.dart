@@ -184,7 +184,7 @@ class SignupController extends GetxController {
       await _setUserParams(name.text, surname.text, role.toString(), email.text.trim(), password.text, city.text, phone.text);
       Get.toNamed(AppRoutes.driverupload);
     } else {
-      alertError("Make sure you correct the errors on the form before you can proceed");
+      alertError("Fill in required fields properly");
     }
   }
 

@@ -56,7 +56,7 @@ class RideSelectionScreen extends StatelessWidget {
                       Icon(Icons.account_balance_wallet, color: Colors.pink),
                   title: Text('Wallet', style: TextStyle(color: Colors.black)),
                   onTap: () {
-                    Navigator.pop(context);
+                    Get.toNamed(AppRoutes.userwallet);
                   },
                 ),
                 ListTile(
@@ -134,8 +134,7 @@ class RideSelectionScreen extends StatelessWidget {
                                 color: Colors.pink,
                               ),
                             );
-
-                      }
+                          }
                           return Column(
                             children: controller.rides.entries.map((entry) {
                               return GestureDetector(
@@ -178,7 +177,6 @@ class RideSelectionScreen extends StatelessWidget {
         ),
       ),
     );
- 
   }
 
   void showLoadingDialog(BuildContext context) {
@@ -196,9 +194,6 @@ class RideSelectionScreen extends StatelessWidget {
               SizedBox(height: 16),
               Text('Looking for a driver please wait 5 seconds.....'),
               SizedBox(height: 16),
-              LinearProgressIndicator(
-                color: Colors.pink,
-              ),
             ],
           ),
           actions: [

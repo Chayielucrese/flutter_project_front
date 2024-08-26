@@ -37,8 +37,8 @@ class DriverProfilePage extends StatelessWidget {
                   onTap: () => controller.pickImage(0),
                   child: CircleAvatar(
                     radius: 60,
-                    backgroundImage: controller.profileImage != null
-                        ? FileImage(controller.profileImage!)
+                    backgroundImage: controller.profilePicture != null
+                        ? NetworkImage(controller.profilePicture)
                         : const AssetImage('Assets/Profile pic-cuate.png')
                             as ImageProvider,
                   ),
@@ -46,66 +46,29 @@ class DriverProfilePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Driver's Name
-              FutureBuilder<String>(
-                future: data.getUserName(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    return Text(
-                      snapshot.data ?? 'Unknown',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    );
-                  }
-                },
-              ),
+              // Driver's Name)
+              Text("${controller.name}",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  )),
+
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Driver's Email
-                  FutureBuilder<String>(
-                    future: data.getUserEmail(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        return Text(
-                          snapshot.data ?? 'johndoe@example.com',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        );
-                      }
-                    },
+                  Text(
+                    "${controller.email}",
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
-                  FutureBuilder<String>(
-                    key: controller.formKey,
-                    future: data.getUserPhone(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        return Text(
-                          snapshot.data ?? 'johndoe@example.com',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        );
-                      }
-                    },
+
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    "${controller.phone}",
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
                 ],
               ),
@@ -122,7 +85,6 @@ class DriverProfilePage extends StatelessWidget {
               appTextField(
                 labelText: "Phone",
                 icon: Icons.phone,
-
                 controller: controller.phoneController,
               ),
               const SizedBox(height: 20),

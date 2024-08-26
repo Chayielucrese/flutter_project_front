@@ -8,7 +8,7 @@ class DriverMainPageController extends AppController {
   int selectedIndex = 0;
 
   final List<Widget> pages = [
-    const DriverDashboardPage(),
+     DriverDashboardPage(),
     const DriverVehiclePage(),
   ];
 

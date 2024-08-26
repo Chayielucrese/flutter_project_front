@@ -43,10 +43,7 @@ Widget buildBottomNavigation(String goto) {
         icon: Icon(Icons.subscriptions),
         label: "Subscription",
       ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.notification_add),
-        label: "Notification",
-      ),
+   
     ],
   );
 }

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 class DriverHomePage extends StatelessWidget {
   const DriverHomePage({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

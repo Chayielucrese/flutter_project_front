@@ -18,7 +18,7 @@ class ViewVehiclePage extends StatelessWidget {
       },
       child: GetBuilder<ViewVehicleController>(
         builder: (controller) => DefaultTabController(
-          length: 3, // Number of tabs
+          length: 2,
           child: Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
@@ -49,7 +49,6 @@ class ViewVehiclePage extends StatelessWidget {
                 tabs: [
                   Tab(text: 'Details'),
                   Tab(text: 'Documents'),
-                  Tab(text: 'Maintenance'),
                 ],
                 indicatorColor: Colors.pink,
                 labelColor: Colors.pink,
@@ -57,116 +56,91 @@ class ViewVehiclePage extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: buildBottomNavigation(AppRoutes.viewvehicle),
-            body: TabBarView(
-              children: [
-                // Vehicle Details Tab
-                controller.vehicles.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'Assets/Front car-rafiki.png', // Update with the path to your image asset
-                              width: 300,
-                              height: 200,
-                            ),
-                            SizedBox(height: 20),
-                            Text(
-                              'No vehicles found',
-                              style:
-                                  TextStyle(fontSize: 18, color: Colors.black),
-                            ),
-                          ],
+         body: TabBarView(
+  children: [
+    controller.vehicles.isEmpty
+      ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'Assets/Front car-rafiki.png',
+                width: 300,
+                height: 200,
+              ),
+              SizedBox(height: 20),
+              Text(
+                'No vehicles found',
+                style: TextStyle(fontSize: 18, color: Colors.black),
+              ),
+            ],
+          ),
+        )
+      : ListView.builder(
+          itemCount: controller.vehicles.length,
+          itemBuilder: (context, index) {
+            final vehicle = controller.vehicles[index];
+            return Card(
+              elevation: 1,
+              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 250,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                              vehicle['vehicleType'] == 'car'
+                                  ? 'Assets/Front car-pana.png'
+                                  : 'Assets/motoride.png'),
+                          fit: BoxFit.cover,
                         ),
-                      )
-                    : ListView.builder(
-                        itemCount: controller.vehicles.length,
-                        itemBuilder: (context, index) {
-                          final vehicle = controller.vehicles[index];
-                          return Card(
-                            elevation: 1,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            child: Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  // Vehicle Image
-                                  Container(
-                                    height: 250,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            vehicle['vehicleType'] == 'car'
-                                                ? 'Assets/Front car-pana.png' // Path to your car image
-                                                : 'Assets/bike_back.png' // Path to your bike image
-                                            ),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  // Vehicle Details
-                                  Text(
-                                    '(${vehicle['vehicleMark']}) ${vehicle['vehicleModel']} ',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    'Plate Number: ${vehicle['plateNumber']}',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  SizedBox(height: 5),
-                                  Text(
-                                    'Vehicle Type: ${vehicle['vehicleType']}',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(height: 10),
-                                  // Delete Button
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: IconButton(
-                                      icon:
-                                          Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () {
-                                        _showDeleteConfirmationDialog(
-                                            context, vehicle, controller);
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '(${vehicle['vehicleMark']}) ${vehicle['vehicleModel']}',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Plate Number: ${vehicle['plateNumber']}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      'Vehicle Type: ${vehicle['vehicleType']}',
+                      style: TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                        icon: Icon(Icons.delete, color: Colors.red),
+                        onPressed: () {
+                          _showDeleteConfirmationDialog(context, vehicle, controller);
                         },
                       ),
-
-                // Vehicle Documents Tab
-                const Center(
-                    child: DriverDocumentsPage()),
-                  
-                // Maintenance Logs Tab
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to maintenance logs page
-                      // Get.toNamed(AppRoutes.maintenanceLogs, arguments: controller.vehicles);
-                    },
-                    child: Text('View Maintenance Logs'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.pink,
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            );
+          },
+        ),
+    // Vehicle Documents Tab
+    const DriverDocumentsPage(), // Ensure DriverDocumentsPage is properly initialized here
+  ],
+),
+
           ),
         ),
       ),

@@ -26,6 +26,7 @@ class ClientProfileController extends AppController {
   void onInit() {
     super.onInit();
     getTokenAndLoadUserProfile();
+    update();
   }
 
   @override
@@ -50,6 +51,7 @@ String email = "";
 String city = "";
 String phone = "";
 String profileImage = "";
+String surname= "";
 
 
   Future<void> userProfile(String newToken) async {
@@ -64,6 +66,7 @@ String profileImage = "";
         city = response['msg']['city'];
         phone = response['msg']['phone'];
         profileImage = response['msg']['profileImage'];
+        surname = response['msg']['surname'];
         update();
       } else {
         print("Failed to get profile: ${res.statusCode}");
@@ -119,6 +122,7 @@ String profileImage = "";
     String password = passwordController.text;
     String phone = phoneController.text;
     String city = cityController.text;
+    
     String base64ProfileImage = await uploadController.getBase64(image!);
     try {
       if (email != null ||
@@ -133,6 +137,11 @@ String profileImage = "";
         if (response.statusCode == 200) {
           Navigator.of(context).pop();
           alertSuccess('${responseJson['msg']}');
+          emailController.clear();
+          phoneController.clear();
+          phoneController.clear();
+          passwordController.clear();
+          profileImage = "";
         } else {
           alertError("${responseJson['msg']}");
         }

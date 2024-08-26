@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Components/TextField.dart';
-import 'package:flutter_application_1/Controller/local_storage.retrieve.dart';
-import 'package:flutter_application_1/Screens/Client_dashboard/client_profile/client_profile_ctrl.dart';
-import 'package:get/get.dart';
 
 void main() {
   runApp(ClientProfileApp());
@@ -22,172 +18,181 @@ class ClientProfileApp extends StatelessWidget {
   }
 }
 
-class ClientProfilePage extends StatelessWidget {
-  ClientProfilePage({super.key});
-  LocalData data = Get.put(LocalData());
+class ClientProfilePage extends StatefulWidget {
+  @override
+  _ClientProfilePageState createState() => _ClientProfilePageState();
+}
 
-  void editProfile(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return GetBuilder<ClientProfileController>(
-          builder: (controller) => AlertDialog(
-            backgroundColor: Colors.white,
-            title: Text(
-              'Edit Profile',
-              style: TextStyle(color: Colors.pink),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                key: controller.formKey,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: 10.0),
-                  appTextField(
-                      controller: controller.passwordController,
-                      obscureText: true,
-                      icon: Icons.password,
-                      labelText: "Password"),
-                  SizedBox(height: 10.0),
-                  appTextField(
-                      controller: controller.emailController,
-                      labelText: "Email",
-                      icon: Icons.email_rounded),
-                  SizedBox(height: 10.0),
-                  appTextField(
-                      controller: controller.cityController,
-                      labelText: "City",
-                      icon: Icons.location_city),
-                  SizedBox(height: 10.0),
-                  appTextField(
-                      controller: controller.phoneController,
-                      labelText: "phone",
-                      icon: Icons.phone),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                child: Text('Cancel', style: TextStyle(color: Colors.pink)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('Save', style: TextStyle(color: Colors.pink)),
-                onPressed: () {
-                  controller.submitForm(context);
-                  controller.getTokenAndLoadUserProfile();
-                  
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+class _ClientProfilePageState extends State<ClientProfilePage> {
+  bool _isEditing = false;
+
+  final TextEditingController nameController = TextEditingController(text: "John Doe");
+  final TextEditingController phoneController = TextEditingController(text: "+1234567890");
+  final TextEditingController emailController = TextEditingController(text: "johndoe@example.com");
+  final TextEditingController addressController = TextEditingController(text: "New York, USA");
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ClientProfileController>(
-      builder: (controller) => Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Profile Info',
-            style: TextStyle(color: Colors.white),
-          ),
-          backgroundColor: Colors.pink,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Profile Info',
+          style: TextStyle(color: Colors.white),
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  CircleAvatar(
+        backgroundColor: Colors.pink,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Center(
+                  child: CircleAvatar(
                     radius: 60,
-                    backgroundImage: controller.profileImage != null
-                        ? NetworkImage(controller.profileImage)
-                        : AssetImage('Assets/Profile pic-cuate.png'),
+                    backgroundImage: AssetImage('Assets/Profile pic-cuate.png'),
                     backgroundColor: Colors.pink,
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: IconButton(
-                      icon:
-                          Icon(Icons.camera_alt, color: Colors.white, size: 30),
-                      onPressed: () {
-                        controller.pickImage(0);
-                      },
-                      color: Colors.pink,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24),
-              buildProfileRow("Name", controller.name),
-              SizedBox(height: 16),
-              buildProfileRow("phone", controller.phone),
-              SizedBox(height: 16),
-              buildProfileRow("Email", controller.email),
-              SizedBox(height: 16),
-              buildProfileRow("City", controller.city),
-              SizedBox(height: 24),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.pink,
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        8.0), // Rounded corners for the button
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: Icon(Icons.camera_alt, color: Colors.white, size: 30),
+                    onPressed: () {
+                      // Action for picking an image
+                    },
                   ),
                 ),
-                onPressed: () {
-                  editProfile(context);
-                },
-                child: Text('Edit Profile'),
+              ],
+            ),
+            SizedBox(height: 24),
+            Card(
+     
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0),
+               
               ),
-            ],
-          ),
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: _isEditing ? _buildEditableFields() : _buildProfileInfo(),
+                ),
+              ),
+            ),
+            SizedBox(height: 34),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.pink,
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  _isEditing = !_isEditing;
+                });
+              },
+              child: Text(_isEditing ? 'Save Profile' : 'Edit Profile'),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget buildProfileRow(String label, String value) {
+  List<Widget> _buildProfileInfo() {
+    return [
+      _buildInfoRow("Name", nameController.text, Icons.person),
+      _buildInfoRow("Phone", phoneController.text, Icons.phone),
+      _buildInfoRow("Email", emailController.text, Icons.email),
+      _buildInfoRow("Address", addressController.text, Icons.location_on),
+    ];
+  }
+
+  List<Widget> _buildEditableFields() {
+    return [
+      _buildTextField(
+        controller: nameController,
+        label: "Name",
+        icon: Icons.person,
+      ),
+      SizedBox(height: 16),
+      _buildTextField(
+        controller: phoneController,
+        label: "Phone Number",
+        icon: Icons.phone,
+      ),
+      SizedBox(height: 16),
+      _buildTextField(
+        controller: emailController,
+        label: "Email",
+        icon: Icons.email,
+      ),
+      SizedBox(height: 16),
+      _buildTextField(
+        controller: addressController,
+        label: "Address",
+        icon: Icons.location_on,
+      ),
+    ];
+  }
+
+  Widget _buildInfoRow(String label, String value, IconData icon) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Expanded(
-            flex: 3,
-            child: Text(
-              '$label:',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.pink),
+          Icon(icon, color: Colors.pink),
+          SizedBox(width: 12),
+          Text(
+            "$label:",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+              fontWeight: FontWeight.bold,
             ),
           ),
+          SizedBox(width: 12),
           Expanded(
-            flex: 5,
             child: Text(
               value,
-              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        prefixIcon: Icon(icon, color: Colors.pink),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
     );
   }

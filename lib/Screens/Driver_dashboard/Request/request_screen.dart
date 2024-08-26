@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/BottomNavigator.dart';
 import 'package:flutter_application_1/Routes/app_routes.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Request/Request_tabview_pages/Advance_service_request/advance_request_screen.dart';
-import 'package:flutter_application_1/Screens/Driver_dashboard/Request/Request_tabview_pages/Filter_request/filter_screen.dart';
+
 import 'package:flutter_application_1/Screens/Driver_dashboard/Request/Request_tabview_pages/Instant_service_request/instant_service_request_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Request/Request_tabview_pages/Request_historry.dart/history_screen.dart';
 
@@ -10,7 +10,7 @@ class DriverRequestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length:3 ,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Request Information', style: TextStyle(color: Colors.white),),
@@ -23,7 +23,7 @@ class DriverRequestPage extends StatelessWidget {
               Tab(child: Text('Instant Resquest ', style: TextStyle(color: Colors.white ))),
               Tab(child: Text('Advanced Requests', style: TextStyle(color: Colors.white))),
               Tab(child: Text('Ride History', style: TextStyle(color: Colors.white))),
-              Tab(child: Text('Filter', style: TextStyle(color: Colors.white))),
+          
             ],
           ),
         ),
@@ -34,7 +34,7 @@ class DriverRequestPage extends StatelessWidget {
             const Center(child: InstanceServiceRequestPage()),
             Center(child: AdvancedServiceRequestPage()),
             Center(child: RequestHistoryPage()),
-            const Center(child: FilterRequestPage()),
+         
           ],
         ),
       ),

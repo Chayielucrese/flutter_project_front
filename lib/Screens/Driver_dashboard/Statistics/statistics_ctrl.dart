@@ -42,7 +42,8 @@ class DriverDashboardController extends AppController {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseJson = json.decode(response.body);
-        numOfVehicles = responseJson['totalVehicles']; // Update the variable
+        numOfVehicles = responseJson['totalVehicles'];
+        print("$numOfVehicles, numOfvehicle"); // Update the variable
         update(); // Notify listeners about the update
       } else {
         print("Failed to fetch vehicles: ${response.statusCode}");
@@ -50,5 +51,14 @@ class DriverDashboardController extends AppController {
     } catch (e) {
       alertError("An error occurred, please try again later.");
     }
+  }
+
+   Future<void> removeTokenFromLocalStorage() async {
+    final pref = await SharedPreferences.getInstance();
+    bool results = await pref.remove("token");
+    print("token removed: $results");
+  }
+  Future<void>getCurrentUser()async{
+    
   }
 }

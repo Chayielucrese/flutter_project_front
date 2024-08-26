@@ -14,12 +14,15 @@ Widget appTextField({
   bool isPhone = false,
   bool isPassword = false,
   bool isPlateNumber = false,
-  int maxLines = 1,  Future<Null> Function()? onTap, // Added maxLines parameter
+  int maxLines = 1, // Added maxLines parameter
+  Future<Null> Function()? onTap,
+  TextInputType? keyboardType,  // Added keyboardType parameter
 }) {
   return TextFormField(
     controller: controller,
     obscureText: obscureText,
     maxLines: maxLines,
+    keyboardType: keyboardType ?? TextInputType.text, // Use keyboardType if provided, else default to TextInputType.text
     decoration: InputDecoration(
       labelText: labelText,
       border: OutlineInputBorder(
@@ -51,36 +54,33 @@ Widget appTextField({
       if (isPassword) {
         return signupController.validatePassword(value);
       }
-      if(isPlateNumber){
+      if (isPlateNumber) {
         return validatePlateNumber(value, 'CM');
       }
       return null;
     },
-    
+    onTap: onTap,
   );
-
-  
-  
 }
 
- String? validatePlateNumber(String plateNumber, String countryCode) {
-    if (plateNumber.isEmpty) {
-      return 'Plate number is required';
-    }
+String? validatePlateNumber(String plateNumber, String countryCode) {
+  if (plateNumber.isEmpty) {
+    return 'Plate number is required';
+  }
 
-    Map<String, RegExp> patterns = {
-      'CM': RegExp(r'^[A-Z]{2}-\d{3}-[A-Z]{2}$'),
-    };
+  Map<String, RegExp> patterns = {
+    'CM': RegExp(r'^[A-Z]{2}-\d{3}-[A-Z]{2}$'),
+  };
 
-    final pattern = patterns[countryCode];
+  final pattern = patterns[countryCode];
 
-    if (pattern == null) {
-      return 'Unsupported country code';
-    }
+  if (pattern == null) {
+    return 'Unsupported country code';
+  }
 
-    if (!pattern.hasMatch(plateNumber)) {
-      return 'Invalid plate number format for $countryCode';
-    }
+  if (!pattern.hasMatch(plateNumber)) {
+    return 'Invalid plate number format for $countryCode';
+  }
 
-    return null;
-    }
+  return null;
+}

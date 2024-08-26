@@ -1,11 +1,11 @@
 name: flutter_application_1
 description: "A new Flutter project."
-publish_to: 'none' 
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: ">=3.4.3 <4.0.0"
 
 dependencies:
   flutter:
@@ -25,10 +25,12 @@ dependencies:
   google_maps_flutter: ^2.9.0
   dio: ^5.6.0
   flutter_polyline_points: ^2.1.0
-  jwt_decoder: ^2.0.1
   google_places_flutter: ^2.0.9
-
-
+  jwt_decoder: ^2.0.1
+  google_places_autocomplete_text_field: ^0.1.3
+  video_player: ^2.9.1
+  dropdown_search: ^5.0.6
+  open_street_map_search_and_pick: ^0.1.1
 
 dev_dependencies:
   flutter_test:
@@ -66,3 +68,9 @@ flutter:
     - Assets/Profile pic-cuate.png
     - Assets/bike_back.png
     - Assets/bike2.png
+    - Assets/motoride.png
+    - Assets/book-taxi.mp4
+    - Assets/order-ride-removebg-preview.png
+    - Assets/E-Wallet-bro.png
+    - Assets/Wallet-pana.png
+  

@@ -16,4 +16,7 @@ class AppRoutes {
   static String clientprofile = '/clientprofile';
   static String ridedetails = '/ridedetails';
   static String reservationscreen = '/reservationscreen';
-  }
+  static String driverdocuments = '/driverdocuments';
+  static String userwallet = '/userwallet';
+  static String walletrecharge = '/walletrecharge';
+}

@@ -17,8 +17,14 @@ import 'package:flutter_application_1/Screens/Driver_dashboard/Subscription/subc
 import 'package:flutter_application_1/Screens/Driver_dashboard/Subscription/subcription_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Vehicles/vehicle_binding.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Vehicles/vehicle_screen.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/View_vehicles/Vehicle_tabview/document_binding.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/View_vehicles/Vehicle_tabview/document_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/View_vehicles/view_vehicle_biding.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/View_vehicles/view_vehicle_screen.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/Wallet/wallet_binding.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/Wallet/wallet_screen.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/Wallet_Recharge/recharge_binding.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/Wallet_Recharge/recharge_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Welcome/welcome_screen.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Statistics/statastics_binding.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Statistics/statistics_screen.dart';
@@ -56,7 +62,7 @@ class AppPages {
         binding: ClientWelcomeBinding()),
     GetPage(
         name: AppRoutes.driverwelcome,
-        page: () => const DriverHomePage(),
+        page: () =>  DriverHomePage(),
         binding: DriverWelcomeBinding()),
     GetPage(
         name: AppRoutes.driverupload,
@@ -64,7 +70,7 @@ class AppPages {
         binding: DriverUploadBinding()),
     GetPage(
         name: AppRoutes.driverStats,
-        page: () => const DriverDashboardPage(),
+        page: () =>  DriverDashboardPage(),
         binding: DriverDashboardBinding()),
     GetPage(
         name: AppRoutes.drivervehicle,
@@ -106,5 +112,18 @@ class AppPages {
         name: AppRoutes.reservationscreen,
         page: () =>   ReservationScreen(),
         binding: RequestFormBinding()),
+         GetPage(
+        name: AppRoutes.driverdocuments,
+        page: () =>   DriverDocumentsPage(),
+        binding: DriverVehicleDocumentBinding()),
+         GetPage(
+        name: AppRoutes.userwallet,
+        page: () =>   UserWalletPage(),
+        binding: UserWalletBinding()),
+
+           GetPage(
+        name: AppRoutes.walletrecharge,
+        page: () =>   WalletRechargePage(),
+        binding: WalletRechargeBinding())
   ];
 }

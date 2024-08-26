@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/Components/BottomNavigator.dart';
 import 'package:flutter_application_1/Routes/app_routes.dart';
+import 'package:flutter_application_1/Screens/Driver_dashboard/Profile/profile_ctrl.dart';
 import 'package:flutter_application_1/Screens/Driver_dashboard/Statistics/statistics_ctrl.dart';
 import 'package:get/get.dart';
 
 class DriverDashboardPage extends StatelessWidget {
-  const DriverDashboardPage({super.key});
+   DriverDashboardPage({super.key});
+DriverProfileController userName = Get.put(DriverProfileController());
 
   // Manage the state here
 
@@ -18,11 +20,11 @@ class DriverDashboardPage extends StatelessWidget {
           backgroundColor: Colors.white,
           appBar: AppBar(
             backgroundColor: Colors.pink,
-            title: Text('Hello!', style: TextStyle(color: Colors.white, fontSize: 17)),
+            title: Text('Hello ${userName.name}!', style: TextStyle(color: Colors.white, fontSize: 17)),
             leading: IconButton(
               iconSize: 30,
               icon: CircleAvatar(
-                backgroundImage: AssetImage('Assets/taxi4.png'),
+                backgroundImage:NetworkImage(userName.profilePicture),
                 // Your profile image here
               ),
               onPressed: () {
@@ -36,6 +38,12 @@ class DriverDashboardPage extends StatelessWidget {
                  Get.toNamed(AppRoutes.driverprofile);
                 },
               ),
+              IconButton(
+              icon: Icon(Icons.logout, color: Colors.white),
+              onPressed: () {
+              showLogoutDialogue(context, controller);
+              },
+            ),
             ],
           ),
           bottomNavigationBar: buildBottomNavigation(AppRoutes.driverStats),
@@ -87,7 +95,7 @@ class DriverDashboardPage extends StatelessWidget {
                               child: DashboardCard(
                                 title: 'Number of Vehicles',
                                 
-                                value:controller.fetchNumOfVehicles().toString(),
+                                value:"0",
                                 icon: Icons.directions_car,
                               ),
                             ),
@@ -183,7 +191,10 @@ class DriverDashboardPage extends StatelessWidget {
       ),
     );
   }
+
+  
 }
+
 
 class DocumentCheck extends StatelessWidget {
   final bool isDocumentVerified;
@@ -264,6 +275,48 @@ class DashboardCard extends StatelessWidget {
       ),
     );
   }
+}
+
+void showLogoutDialogue(
+    BuildContext context, DriverDashboardController controller) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(
+              color: Colors.pink,
+            ),
+            SizedBox(height: 16),
+            Text(
+              'Logout Confirmation',
+              style: TextStyle(color: Colors.pink, fontSize: 20),
+            ),
+            SizedBox(height: 16),
+            Text("Are your sure to quit this page? ")
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Dismiss dialog
+            },
+            child: Text('Cancel', style: TextStyle(color: Colors.pink)),
+          ),
+          TextButton(
+            onPressed: () {
+              controller.removeTokenFromLocalStorage();
+              Get.toNamed(AppRoutes.welcome);
+            },
+            child: Text('yes', style: TextStyle(color: Colors.pink)),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class InfoBox extends StatelessWidget {
